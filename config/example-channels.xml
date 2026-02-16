@@ -1,33 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <channels>
-  <!-- Example channels for various sites -->
-  <!-- You can find more channels at: https://github.com/iptv-org/epg/tree/master/sites -->
-  
-  <!-- Arirang TV -->
+  <!-- Testing with just one working channel -->
   <channel site="arirang.com" lang="en" xmltv_id="ArirangTV.kr" site_id="CH_K">Arirang TV</channel>
-  
-  <!-- Bloomberg -->
-  <channel site="bloomberg.com" lang="en" xmltv_id="BloombergTVEurope.uk" site_id="europe">Bloomberg TV Europe</channel>
-  <channel site="bloomberg.com" lang="en" xmltv_id="BloombergTVAsia.hk" site_id="asia">Bloomberg TV Asia</channel>
-  
-  <!-- CNN International -->
-  <channel site="cnn.com" lang="en" xmltv_id="CNNInternational.us" site_id="cnn-international">CNN International</channel>
-  
-  <!-- Al Jazeera -->
-  <channel site="aljazeera.com" lang="en" xmltv_id="AlJazeeraEnglish.qa" site_id="ajeng">Al Jazeera English</channel>
-  
-  <!-- BBC -->
-  <channel site="bbc.co.uk" lang="en" xmltv_id="BBCWorldNews.uk" site_id="bbc-world-news">BBC World News</channel>
-  
-  <!-- DW (Deutsche Welle) -->
-  <channel site="dw.com" lang="en" xmltv_id="DWEnglish.de" site_id="en">DW English</channel>
-  
-  <!-- France 24 -->
-  <channel site="france24.com" lang="en" xmltv_id="France24English.fr" site_id="en">France 24 English</channel>
-  
-  <!-- RT -->
-  <channel site="rt.com" lang="en" xmltv_id="RTNews.ru" site_id="rt">RT News</channel>
-  
-  <!-- TRT World -->
-  <channel site="trtworld.com" lang="en" xmltv_id="TRTWorld.tr" site_id="trtworld">TRT World</channel>
 </channels>
