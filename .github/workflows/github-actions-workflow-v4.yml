@@ -1,0 +1,136 @@
+name: Fetch EPG Data
+
+on:
+  # Run daily at midnight UTC
+  schedule:
+    - cron: '0 0 * * *'
+  
+  # Allow manual triggering
+  workflow_dispatch:
+    inputs:
+      days:
+        description: 'Number of days to fetch'
+        required: false
+        default: '3'
+      max_connections:
+        description: 'Maximum concurrent connections'
+        required: false
+        default: '5'
+
+jobs:
+  fetch-epg:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: Make scripts executable
+        run: chmod +x epg-fetcher.sh
+      
+      - name: Fetch EPG data
+        run: |
+          ./epg-fetcher.sh \
+            --channels example-channels.xml \
+            --output guide.xml \
+            --days ${{ github.event.inputs.days || '3' }} \
+            --max-connections ${{ github.event.inputs.max_connections || '5' }} \
+            --gzip
+      
+      - name: Upload EPG guide as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: epg-guide-${{ github.run_number }}
+          path: |
+            guide.xml
+            guide.xml.gz
+          retention-days: 7
+      
+      - name: Commit and push updated guide (optional)
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add guide.xml guide.xml.gz
+          git diff --staged --quiet || git commit -m "Update EPG guide $(date +'%Y-%m-%d %H:%M:%S')"
+          git push
+        continue-on-error: true
+      
+      - name: Create release (optional)
+        if: github.event_name == 'schedule'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: epg-${{ github.run_number }}
+          name: EPG Guide ${{ github.run_number }}
+          files: |
+            guide.xml
+            guide.xml.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  fetch-epg-docker:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Pull EPG Docker image
+        run: docker pull ghcr.io/iptv-org/epg:master
+      
+      - name: Run EPG fetch in Docker
+        run: |
+          docker run --rm \
+            -v $PWD/example-channels.xml:/epg/channels.xml:ro \
+            -v $PWD:/epg/output \
+            -e MAX_CONNECTIONS=10 \
+            -e DAYS=3 \
+            -e GZIP=true \
+            -e RUN_AT_STARTUP=true \
+            ghcr.io/iptv-org/epg:master
+      
+      - name: Upload Docker-fetched guide
+        uses: actions/upload-artifact@v4
+        with:
+          name: epg-guide-docker-${{ github.run_number }}
+          path: guide.xml
+
+  fetch-multiple-sites:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        site:
+          - arirang.com
+          - bloomberg.com
+          - dw.com
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: Make scripts executable
+        run: chmod +x epg-fetcher.sh
+      
+      - name: Fetch EPG for ${{ matrix.site }}
+        run: |
+          ./epg-fetcher.sh \
+            --site ${{ matrix.site }} \
+            --output guide-${{ matrix.site }}.xml \
+            --days 3 \
+            --max-connections 5
+      
+      - name: Upload guide for ${{ matrix.site }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: epg-${{ matrix.site }}-${{ github.run_number }}
+          path: guide-${{ matrix.site }}.xml
