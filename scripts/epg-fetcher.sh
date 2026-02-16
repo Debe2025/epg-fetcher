@@ -188,8 +188,6 @@ build_grab_command() {
     fi
     
     if [ -n "$CHANNELS_FILE" ]; then
-        # Copy channels file to work directory
-        cp "$CHANNELS_FILE" "$WORK_DIR/channels.xml"
         cmd="$cmd --channels=channels.xml"
     fi
     
@@ -217,6 +215,11 @@ build_grab_command() {
 # Fetch EPG data
 fetch_epg() {
     print_info "Fetching EPG data..."
+    
+    # Copy channels file to work directory BEFORE changing directory
+    if [ -n "$CHANNELS_FILE" ]; then
+        cp "$CHANNELS_FILE" "$WORK_DIR/channels.xml"
+    fi
     
     cd "$WORK_DIR"
     
