@@ -5,9 +5,9 @@
 # It acts as a simple interface that other repos can use via curl or git submodule
 #
 # Usage from another repository:
-#   curl -sSL https://raw.githubusercontent.com/yourusername/epg-fetcher/main/request-epg.sh | bash -s -- [options]
+#   curl -sSL https://raw.githubusercontent.com/Debe2025/epg-fetcher/main/request-epg.sh | bash -s -- [options]
 #   OR
-#   git submodule add https://github.com/yourusername/epg-fetcher.git epg
+#   git submodule add https://github.com/Debe2025/epg-fetcher.git epg
 #   ./epg/request-epg.sh [options]
 #
 
@@ -199,7 +199,7 @@ download_channels() {
 
 download_fetcher_script() {
     local script_name="$1"
-    local script_url="https://raw.githubusercontent.com/yourusername/epg-fetcher/main/$script_name"
+    local script_url="https://raw.githubusercontent.com/Debe2025/epg-fetcher/main/$script_name"
     local script_path="$TEMP_DIR/$script_name"
     
     print_info "Downloading $script_name..."
