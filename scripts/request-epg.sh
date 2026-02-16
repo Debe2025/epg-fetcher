@@ -30,11 +30,11 @@ METHOD="auto"  # auto, direct, docker
 KEEP_TEMP="false"
 
 print_info() {
-    echo -e "${GREEN}[EPG]${NC} $1"
+    echo -e "${GREEN}[EPG]${NC} $1" >&2
 }
 
 print_error() {
-    echo -e "${RED}[ERROR]${NC} $1"
+    echo -e "${RED}[ERROR]${NC} $1" >&2
 }
 
 show_help() {
