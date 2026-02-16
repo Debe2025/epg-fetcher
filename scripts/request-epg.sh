@@ -212,7 +212,7 @@ download_channels() {
 
 download_fetcher_script() {
     local script_name="$1"
-    local script_url="https://raw.githubusercontent.com/Debe2025/epg-fetcher/main/$script_name"
+    local script_url="https://raw.githubusercontent.com/Debe2025/epg-fetcher/main/scripts/$script_name"
     local script_path="$TEMP_DIR/$script_name"
     
     print_info "Downloading $script_name..."

@@ -23,27 +23,27 @@ jobs:
     
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
       
       - name: Make scripts executable
-        run: chmod +x epg-fetcher.sh
+        run: chmod +x scripts/epg-fetcher.sh
       
       - name: Fetch EPG data
         run: |
-          ./epg-fetcher.sh \
-            --channels example-channels.xml \
+          ./scripts/epg-fetcher.sh \
+            --channels config/example-channels.xml \
             --output guide.xml \
             --days ${{ github.event.inputs.days || '3' }} \
             --max-connections ${{ github.event.inputs.max_connections || '5' }} \
             --gzip
       
       - name: Upload EPG guide as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: epg-guide-${{ github.run_number }}
           path: |
@@ -77,7 +77,7 @@ jobs:
     
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       
       - name: Pull EPG Docker image
         run: docker pull ghcr.io/iptv-org/epg:master
@@ -85,7 +85,7 @@ jobs:
       - name: Run EPG fetch in Docker
         run: |
           docker run --rm \
-            -v $PWD/example-channels.xml:/epg/channels.xml:ro \
+            -v $PWD/config/example-channels.xml:/epg/channels.xml:ro \
             -v $PWD:/epg/output \
             -e MAX_CONNECTIONS=10 \
             -e DAYS=3 \
@@ -94,7 +94,7 @@ jobs:
             ghcr.io/iptv-org/epg:master
       
       - name: Upload Docker-fetched guide
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: epg-guide-docker-${{ github.run_number }}
           path: guide.xml
@@ -111,26 +111,26 @@ jobs:
     
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
       
       - name: Make scripts executable
-        run: chmod +x epg-fetcher.sh
+        run: chmod +x scripts/epg-fetcher.sh
       
       - name: Fetch EPG for ${{ matrix.site }}
         run: |
-          ./epg-fetcher.sh \
+          ./scripts/epg-fetcher.sh \
             --site ${{ matrix.site }} \
             --output guide-${{ matrix.site }}.xml \
             --days 3 \
             --max-connections 5
       
       - name: Upload guide for ${{ matrix.site }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: epg-${{ matrix.site }}-${{ github.run_number }}
           path: guide-${{ matrix.site }}.xml
