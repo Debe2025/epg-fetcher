@@ -1,0 +1,32 @@
+
+# EPG outputs
+*.xml
+!example-channels.xml
+!config/**/*.xml
+*.xml.gz
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+
+# Node.js
+node_modules/
+npm-debug.log*
+package-lock.json
+
+# Temp files
+*.tmp
+.DS_Store
+epg-work/
+epg_cache/
+output/
+public/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+EOF

@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # EPG Fetcher Service - Automatic daily updates
+  epg-fetcher:
+    image: ghcr.io/iptv-org/epg:master
+    container_name: epg-fetcher
+    volumes:
+      # Mount your channels file
+      - ./example-channels.xml:/epg/channels.xml:ro
+      # Mount output directory
+      - ./output:/epg/public
+    environment:
+      # Fetch schedule (daily at midnight)
+      CRON_SCHEDULE: "0 0 * * *"
+      # Performance settings
+      MAX_CONNECTIONS: 10
+      TIMEOUT: 30000
+      DELAY: 100
+      # Number of days to fetch
+      DAYS: 7
+      # Create compressed version
+      GZIP: "true"
+      # Run on startup
+      RUN_AT_STARTUP: "true"
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    networks:
+      - epg-network
+
+  # EPG API Server (Python Flask)
+  epg-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: epg-api
+    volumes:
+      - ./epg_cache:/app/epg_cache
+    environment:
+      - FLASK_ENV=production
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+    networks:
+      - epg-network
+    depends_on:
+      - epg-fetcher
+
+  # Nginx - Serve EPG files
+  nginx:
+    image: nginx:alpine
+    container_name: epg-nginx
+    volumes:
+      - ./output:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    networks:
+      - epg-network
+    depends_on:
+      - epg-fetcher
+
+networks:
+  epg-network:
+    driver: bridge
+
+volumes:
+  epg-output:
+  epg-cache:
