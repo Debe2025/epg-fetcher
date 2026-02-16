@@ -97,7 +97,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: epg-guide-docker-${{ github.run_number }}
-          path: guide.xml
+          path: |
+            public/guide.xml
+            public/guide.xml.gz
+          if-no-files-found: warn
 
   fetch-multiple-sites:
     runs-on: ubuntu-latest
