@@ -141,7 +141,20 @@ detect_method() {
         return
     fi
     
-    # Check if Docker is available
+    # If site is specified, use direct method (Docker doesn't support sites)
+    if [ -n "$DEFAULT_SITE" ]; then
+        if command -v node &> /dev/null && command -v npm &> /dev/null && command -v git &> /dev/null; then
+            METHOD="direct"
+            print_info "Using direct method (required for site-based fetching)"
+            return
+        else
+            print_error "Site-based fetching requires Node.js, npm, and git"
+            print_error "Please install Node.js: https://nodejs.org/"
+            exit 1
+        fi
+    fi
+    
+    # Check if Docker is available (for channels-based fetching)
     if command -v docker &> /dev/null; then
         if docker info &> /dev/null 2>&1; then
             METHOD="docker"
