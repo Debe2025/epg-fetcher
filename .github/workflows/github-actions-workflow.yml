@@ -103,6 +103,7 @@ jobs:
     runs-on: ubuntu-latest
     
     strategy:
+      fail-fast: false  # Don't stop other jobs if one fails
       matrix:
         site:
           - arirang.com
@@ -122,6 +123,7 @@ jobs:
         run: chmod +x scripts/epg-fetcher.sh
       
       - name: Fetch EPG for ${{ matrix.site }}
+        continue-on-error: true  # Don't fail the job if this step fails
         run: |
           ./scripts/epg-fetcher.sh \
             --site ${{ matrix.site }} \
@@ -130,7 +132,9 @@ jobs:
             --max-connections 5
       
       - name: Upload guide for ${{ matrix.site }}
+        if: always()  # Upload even if previous step failed
         uses: actions/upload-artifact@v4
         with:
           name: epg-${{ matrix.site }}-${{ github.run_number }}
           path: guide-${{ matrix.site }}.xml
+          if-no-files-found: ignore  # Don't fail if file doesn't exist
