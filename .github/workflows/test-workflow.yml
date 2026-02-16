@@ -19,10 +19,10 @@ jobs:
     
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
       
@@ -51,7 +51,7 @@ jobs:
           fi
       
       - name: Upload EPG as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-epg-guide
           path: test-guide.xml
@@ -62,7 +62,7 @@ jobs:
     
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       
       - name: Make script executable
         run: chmod +x request-epg.sh
@@ -86,7 +86,7 @@ jobs:
           fi
       
       - name: Upload result
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-request-guide
           path: test-request-guide.xml
@@ -97,10 +97,10 @@ jobs:
     
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
       
@@ -126,7 +126,7 @@ jobs:
           fi
       
       - name: Upload result
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-channels-guide
           path: test-channels-guide.xml
