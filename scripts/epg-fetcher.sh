@@ -8,6 +8,9 @@
 
 set -e
 
+# Store initial directory
+INITIAL_DIR="$(pwd)"
+
 # Default values
 WORK_DIR="./epg-work"
 OUTPUT_FILE="guide.xml"
@@ -69,11 +72,11 @@ parse_args() {
                 shift 2
                 ;;
             -c|--channels)
-                CHANNELS_FILE="$2"
+                CHANNELS_FILE="$(cd "$(dirname "$2")" && pwd)/$(basename "$2")"
                 shift 2
                 ;;
             -o|--output)
-                OUTPUT_FILE="$2"
+                OUTPUT_FILE="$INITIAL_DIR/$2"
                 shift 2
                 ;;
             -d|--days)
