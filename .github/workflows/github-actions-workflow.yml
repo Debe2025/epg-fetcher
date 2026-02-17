@@ -86,7 +86,7 @@ jobs:
         run: |
           docker run --rm \
             -v $PWD/config/example-channels.xml:/epg/channels.xml:ro \
-            -v $PWD:/epg/output \
+            -v $PWD/public:/epg/public \
             -e MAX_CONNECTIONS=10 \
             -e DAYS=3 \
             -e GZIP=true \
