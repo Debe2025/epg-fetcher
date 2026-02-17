@@ -1,22 +1,12 @@
-# Python EPG Fetcher Requirements
-# Install with: pip install -r requirements.txt
+# Web Server
+flask
+gunicorn
+requests
 
-# No external dependencies required for basic functionality
-# The script uses only Python standard library
-
-# Optional dependencies for enhanced functionality:
-
-# For XML validation and parsing
+# Core Fetcher Logic
 lxml>=4.9.0
-
-# For scheduled tasks
 schedule>=1.1.0
-
-# For async operations
 aiofiles>=23.0.0
-
-# For progress bars
 tqdm>=4.65.0
-
-# For logging
 colorlog>=6.7.0
+
